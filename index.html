@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>我国34个省级行政区域单位记忆系统 - 国家智慧教育风格</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --edu-primary: #1456F0;
+      --edu-primary-light: #EBF1FF;
+      --edu-primary-hover: #0E44C9;
+      --edu-success: #00B578;
+      --edu-success-light: #E8F9F2;
+      --edu-error: #FA5151;
+      --edu-error-light: #FDECEC;
+      --bg-page: #F5F7FA;
+      --bg-card: #FFFFFF;
+      --text-title: #1D2129;
+      --text-body: #4E5969;
+      --text-muted: #86909C;
+      --border-subtle: #E5E6EB;
+      --border-radius: 12px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh; /* 适配移动端动态地址栏高度 */
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 顶部导航 */
+    header {
+      height: 56px;
+      min-height: 56px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 20;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .brand-badge {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: linear-gradient(135deg, var(--edu-primary) 0%, #3B7FFF 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-title);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* 胶囊导航切换器 */
+    .capsule-tabs {
+      display: flex;
+      background: #F2F3F5;
+      padding: 3px;
+      border-radius: 20px;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .tab-btn {
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-body);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-card);
+      color: var(--edu-primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .main-container {
+      flex: 1;
+      position: relative;
+      background-color: var(--bg-page);
+      min-height: 0;
+    }
+
+    .view-panel {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+    }
+
+    .view-panel.active {
+      display: flex;
+    }
+
+    /* 1. 学习模式 */
+    #learn-view {
+      background-color: #cae5f8;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    #study-map-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 2. 记忆背诵模式：响应式弹性布局 */
+    #quiz-view {
+      flex-direction: column;
+      background-color: var(--bg-page);
+      position: relative;
+      padding: 14px 20px;
+      gap: 12px;
+    }
+
+    .quiz-display-area {
+      flex: 1;
+      position: relative;
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-subtle);
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #quiz-map-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .compass-hud {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .compass-arrow {
+      width: 2px;
+      height: 24px;
+      background: var(--text-muted);
+      position: relative;
+      margin-bottom: 2px;
+    }
+    .compass-arrow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -4px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 8px solid var(--edu-error);
+    }
+
+    /* 底部面板 */
+    .quiz-bottom-panel {
+      flex-shrink: 0;
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 20px;
+      z-index: 10;
+    }
+
+    .quiz-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .quiz-section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-title);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .quiz-section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 11px;
+      background: var(--edu-primary);
+      border-radius: 2px;
+    }
+
+    .option-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .option-btn {
+      padding: 9px 8px;
+      background: #F7F8FA;
+      border: 1px solid #E5E6EB;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--text-title);
+      font-weight: 500;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      word-break: keep-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .option-btn:hover {
+      background-color: var(--edu-primary-light);
+      border-color: #A4BFF8;
+      color: var(--edu-primary);
+    }
+
+    .option-btn.selected {
+      background: var(--edu-primary-light);
+      border-color: var(--edu-primary);
+      color: var(--edu-primary);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(20, 86, 240, 0.12);
+    }
+
+    .option-btn.correct {
+      background: var(--edu-success-light) !important;
+      border-color: var(--edu-success) !important;
+      color: var(--edu-success) !important;
+      font-weight: 700;
+    }
+
+    .option-btn.wrong {
+      background: var(--edu-error-light) !important;
+      border-color: var(--edu-error) !important;
+      color: var(--edu-error) !important;
+      font-weight: 700;
+    }
+
+    .bottom-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      margin-top: 8px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .status-hint {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .status-hint.error { color: var(--edu-error); }
+    .status-hint.success { color: var(--edu-success); }
+
+    .btn-action {
+      padding: 6px 18px;
+      background: var(--edu-primary);
+      color: #FFFFFF;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(20, 86, 240, 0.25);
+      flex-shrink: 0;
+    }
+
+    .btn-action.hide { display: none; }
+
+    #tap-advance-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 50;
+      cursor: pointer;
+      display: none;
+    }
+
+    .loading-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.96);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #E5E6EB;
+      border-top-color: var(--edu-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ================= 针对手机端竖屏（<= 768px）媒体查询适配 ================= */
+    @media (max-width: 768px) {
+      header {
+        padding: 0 12px;
+        height: 50px;
+        min-height: 50px;
+      }
+      .brand-subtitle { display: none; }
+      .brand-title { font-size: 0.95rem; }
+      .brand-badge { width: 28px; height: 28px; min-width: 28px; font-size: 0.95rem; }
+      
+      .tab-btn {
+        padding: 5px 10px;
+        font-size: 0.78rem;
+      }
+
+      #quiz-view {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+
+      /* 手机端底部卡片自适应高度与紧凑内边距 */
+      .quiz-bottom-panel {
+        padding: 10px 12px;
+      }
+
+      .quiz-columns {
+        gap: 8px;
+      }
+
+      .quiz-section-title {
+        font-size: 0.74rem;
+      }
+
+      .option-btn {
+        padding: 8px 4px;
+        font-size: 0.82rem; /* 减小字号，避免长省名（如内蒙古自治区）折行导致高度不一致 */
+      }
+
+      .status-hint {
+        font-size: 0.78rem;
+      }
+
+      .btn-action {
+        padding: 5px 12px;
+        font-size: 0.78rem;
+      }
+    }
+
+    /* 极窄屏（宽度 <= 360px，如 iPhone SE）特调 */
+    @media (max-width: 360px) {
+      .option-btn {
+        font-size: 0.75rem;
+        padding: 7px 2px;
+      }
+      .brand-title {
+        font-size: 0.88rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-box">
+      <div class="brand-badge">地</div>
+      <div class="brand-title-wrap">
+        <div class="brand-title">34个省级行政区记忆系统</div>
+        <div class="brand-subtitle">智慧地理 · 自主互学与智能评测</div>
+      </div>
+    </div>
+    <div class="capsule-tabs">
+      <button class="tab-btn active" id="tab-learn" onclick="switchMode('learn')">学习模式</button>
+      <button class="tab-btn" id="tab-quiz" onclick="switchMode('quiz')">记忆背诵</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div id="loading" class="loading-mask">
+      <div class="spinner"></div>
+      <div id="loading-tip" style="color: var(--text-body); font-size: 0.9rem;">正在装载地图数据...</div>
+    </div>
+
+    <!-- 1. 学习模式 -->
+    <div id="learn-view" class="view-panel active">
+      <div id="study-map-container"></div>
+    </div>
+
+    <!-- 2. 记忆背诵模式 -->
+    <div id="quiz-view" class="view-panel">
+      <div id="tap-advance-mask" onclick="nextQuestion()"></div>
+
+      <div class="quiz-display-area">
+        <div class="compass-hud">
+          <div class="compass-arrow"></div>
+          <span>北</span>
+        </div>
+        <div id="quiz-map-container"></div>
+      </div>
+      
+      <div class="quiz-bottom-panel">
+        <div class="quiz-columns">
+          <div class="option-group">
+            <div class="quiz-section-title">全称</div>
+            <div class="option-cards" id="opts-name"></div>
+          </div>
+          <div class="option-group">
+            <div class="quiz-section-title">简称</div>
+            <div class="option-cards" id="opts-abbr"></div>
+          </div>
+          <div class="option-group">
+            <div class="quiz-section-title">行政中心</div>
+            <div class="option-cards" id="opts-capital"></div>
+          </div>
+        </div>
+
+        <div class="bottom-actions">
+          <div id="status-hint" class="status-hint">请选择全称、简称与行政中心</div>
+          <button class="btn-action hide" id="next-btn" onclick="nextQuestion()">下一题 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROVINCE_DATABASE = [
+      { id: 1, name: "北京市", abbr: "京", capital: "北京", color: "#fff9c4", center: [116.40, 40.22], coord: [116.40, 39.90], isCapital: true },
+      { id: 2, name: "天津市", abbr: "津", capital: "天津", color: "#c8e6c9", center: [117.35, 39.38], coord: [117.20, 39.13] },
+      { id: 3, name: "河北省", abbr: "冀", capital: "石家庄", color: "#f8bbd0", center: [115.30, 38.60], coord: [114.51, 38.04] },
+      { id: 4, name: "山西省", abbr: "晋", capital: "太原", color: "#c8e6c9", center: [112.30, 37.20], coord: [112.55, 37.87] },
+      { id: 5, name: "内蒙古自治区", abbr: "内蒙古", capital: "呼和浩特", color: "#fff9c4", center: [114.20, 43.80], coord: [111.75, 40.84] },
+      { id: 6, name: "辽宁省", abbr: "辽", capital: "沈阳", color: "#d1c4e9", center: [123.00, 41.30], coord: [123.43, 41.80] },
+      { id: 7, name: "吉林省", abbr: "吉", capital: "长春", color: "#f8bbd0", center: [126.20, 43.60], coord: [125.32, 43.89] },
+      { id: 8, name: "黑龙江省", abbr: "黑", capital: "哈尔滨", color: "#c8e6c9", center: [127.80, 47.20], coord: [126.65, 45.77] },
+      { id: 9, name: "上海市", abbr: "沪或申", capital: "上海", color: "#ffe0b2", center: [121.75, 31.15], coord: [121.47, 31.23] },
+      { id: 10, name: "江苏省", abbr: "苏", capital: "南京", color: "#f8bbd0", center: [119.80, 33.20], coord: [118.80, 32.06] },
+      { id: 11, name: "浙江省", abbr: "浙", capital: "杭州", color: "#fff9c4", center: [120.20, 29.10], coord: [120.15, 30.28] },
+      { id: 12, name: "安徽省", abbr: "皖", capital: "合肥", color: "#c8e6c9", center: [117.20, 32.20], coord: [117.28, 31.86] },
+      { id: 13, name: "福建省", abbr: "闽", capital: "福州", color: "#ffe0b2", center: [118.00, 26.00], coord: [119.30, 26.08] },
+      { id: 14, name: "江西省", abbr: "赣", capital: "南昌", color: "#f8bbd0", center: [115.70, 27.60], coord: [115.89, 28.68] },
+      { id: 15, name: "山东省", abbr: "鲁", capital: "济南", color: "#fff9c4", center: [118.20, 36.30], coord: [117.02, 36.67] },
+      { id: 16, name: "河南省", abbr: "豫", capital: "郑州", color: "#ffe0b2", center: [113.60, 33.80], coord: [113.62, 34.75] },
+      { id: 17, name: "湖北省", abbr: "鄂", capital: "武汉", color: "#fff9c4", center: [112.40, 31.10], coord: [114.30, 30.59] },
+      { id: 18, name: "湖南省", abbr: "湘", capital: "长沙", color: "#ffe0b2", center: [111.70, 27.60], coord: [112.98, 28.20] },
+      { id: 19, name: "广东省", abbr: "粤", capital: "广州", color: "#fff9c4", center: [113.60, 23.90], coord: [113.26, 23.13] },
+      { id: 20, name: "广西壮族自治区", abbr: "桂", capital: "南宁", color: "#f8bbd0", center: [108.80, 23.80], coord: [108.32, 22.82] },
+      { id: 21, name: "海南省", abbr: "琼", capital: "海口", color: "#ffe0b2", center: [109.80, 19.10], coord: [110.33, 20.04] },
+      { id: 22, name: "重庆市", abbr: "渝", capital: "重庆", color: "#d1c4e9", center: [107.80, 30.10], coord: [106.55, 29.56] },
+      { id: 23, name: "四川省", abbr: "川或蜀", capital: "成都", color: "#ffe0b2", center: [102.50, 30.60], coord: [104.07, 30.67] },
+      { id: 24, name: "贵州省", abbr: "贵或黔", capital: "贵阳", color: "#c8e6c9", center: [106.70, 26.80], coord: [106.71, 26.57] },
+      { id: 25, name: "云南省", abbr: "云或滇", capital: "昆明", color: "#fff9c4", center: [101.40, 24.30], coord: [102.71, 25.04] },
+      { id: 26, name: "西藏自治区", abbr: "藏", capital: "拉萨", color: "#f8bbd0", center: [88.50, 31.50], coord: [91.13, 29.65] },
+      { id: 27, name: "陕西省", abbr: "陕或秦", capital: "西安", color: "#f8bbd0", center: [108.80, 35.20], coord: [108.95, 34.27] },
+      { id: 28, name: "甘肃省", abbr: "甘或陇", capital: "兰州", color: "#c8e6c9", center: [101.50, 38.20], coord: [103.83, 36.06] },
+      { id: 29, name: "青海省", abbr: "青", capital: "西宁", color: "#d1c4e9", center: [96.00, 35.60], coord: [101.78, 36.62] },
+      { id: 30, name: "宁夏回族自治区", abbr: "宁", capital: "银川", color: "#ffe0b2", center: [106.10, 37.20], coord: [106.28, 38.47] },
+      { id: 31, name: "新疆维吾尔自治区", abbr: "新", capital: "乌鲁木齐", color: "#ffe0b2", center: [85.50, 41.50], coord: [87.62, 43.82] },
+      { id: 32, name: "香港特别行政区", abbr: "港", capital: "香港", color: "#f8bbd0", center: [114.30, 22.38], coord: [114.17, 22.32] },
+      { id: 33, name: "澳门特别行政区", abbr: "澳", capital: "澳门", color: "#d1c4e9", center: [113.45, 22.15], coord: [113.54, 22.19] },
+      { id: 34, name: "台湾省", abbr: "台", capital: "台北", color: "#c8e6c9", center: [121.00, 23.70], coord: [121.51, 25.04] }
+    ];
+
+    let fullGeoJSON = null;
+    let studyChart = null;
+    let quizChart = null;
+    let currentTarget = null;
+    let userSelection = { name: null, abbr: null, capital: null };
+    let hasAnswered = false;
+
+    function isMobileDevice() {
+      return window.innerWidth <= 768;
+    }
+
+    function findMatchedProvince(featureName) {
+      if (!featureName) return null;
+      return PROVINCE_DATABASE.find(item => {
+        const simpleName = item.name.replace(/省|市|维吾尔自治区|壮族自治区|回族自治区|自治区|特别行政区/g, '');
+        return item.name.includes(featureName) || featureName.includes(simpleName);
+      });
+    }
+
+    async function initGeoData() {
+      const geoUrl = "https://geojson.cn/api/china/china.json";
+      try {
+        const response = await fetch(geoUrl);
+        if (!response.ok) throw new Error();
+        fullGeoJSON = await response.json();
+      } catch (err) {
+        document.getElementById('loading-tip').innerText = "加载备用矢量数据源...";
+        const fallbackUrl = "https://raw.githubusercontent.com/yezongyang/china-geojson/master/china.json";
+        const res2 = await fetch(fallbackUrl);
+        fullGeoJSON = await res2.json();
+      }
+
+      fullGeoJSON.features.forEach(f => {
+        const rawName = f.properties.name || f.properties.NAME || '';
+        const matched = findMatchedProvince(rawName);
+        if (matched) {
+          f.properties.name = matched.name;
+          f.properties.cp = matched.center;
+        }
+      });
+
+      echarts.registerMap('china_standard', fullGeoJSON);
+      document.getElementById('loading').style.display = 'none';
+      initStudyMode();
+    }
+
+    // 1. 学习模式
+    function initStudyMode() {
+      if (!studyChart) {
+        studyChart = echarts.init(document.getElementById('study-map-container'), null, {
+          devicePixelRatio: window.devicePixelRatio || 2
+        });
+      }
+
+      const isMobile = isMobileDevice();
+
+      const mapData = PROVINCE_DATABASE.map(item => ({
+        name: item.name,
+        value: 1,
+        abbr: item.abbr,
+        itemStyle: {
+          areaColor: item.color,
+          borderColor: '#475569',
+          borderWidth: 0.8
+        },
+        emphasis: {
+          itemStyle: {
+            areaColor: '#fef08a',
+            borderWidth: 1.5
+          }
+        },
+        label: {
+          show: true,
+          formatter: function() {
+            return `{redName|${item.name}}\n{abbrText|(${item.abbr})}`;
+          },
+          rich: {
+            redName: {
+              fontSize: isMobile ? 8.5 : 10.5,
+              fontWeight: 'bold',
+              color: '#b91c1c',
+              lineHeight: isMobile ? 11 : 14,
+              align: 'center'
+            },
+            abbrText: {
+              fontSize: isMobile ? 7.5 : 9,
+              fontWeight: 'bold',
+              color: '#334155',
+              lineHeight: isMobile ? 10 : 12,
+              align: 'center'
+            }
+          }
+        }
+      }));
+
+      const capitalPointData = PROVINCE_DATABASE.map(item => ({
+        name: item.name,
+        value: [...item.coord, 1],
+        capital: item.capital,
+        isCapital: item.isCapital || false
+      }));
+
+      const option = {
+        backgroundColor: '#cae5f8',
+        series: [
+          {
+            type: 'map',
+            map: 'china_standard',
+            roam: true,
+            zoom: isMobile ? 1.45 : 1.25, // 手机端适当放大基础缩放比例
+            center: [104.2, 36.5],
+            selectedMode: false,
+            data: mapData,
+            zlevel: 1
+          },
+          {
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: capitalPointData.filter(d => d.isCapital),
+            symbol: 'path://M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z',
+            symbolSize: isMobile ? 11 : 13,
+            itemStyle: { color: '#d32f2f' },
+            label: {
+              show: true,
+              position: 'right',
+              offset: [3, 0],
+              formatter: function(params) {
+                return `{capText|${params.data.capital}}`;
+              },
+              rich: {
+                capText: {
+                  fontSize: isMobile ? 8.5 : 10,
+                  fontWeight: 'bold',
+                  color: '#991b1b',
+                  lineHeight: 12
+                }
+              }
+            },
+            zlevel: 10
+          },
+          {
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: capitalPointData.filter(d => !d.isCapital),
+            symbol: 'circle',
+            symbolSize: isMobile ? 4.5 : 5.5,
+            itemStyle: {
+              color: '#ffffff',
+              borderColor: '#1e293b',
+              borderWidth: 1.5
+            },
+            label: {
+              show: true,
+              position: 'right',
+              offset: [2, 0],
+              formatter: function(params) {
+                return `{capText|${params.data.capital}}`;
+              },
+              rich: {
+                capText: {
+                  fontSize: isMobile ? 8 : 9.5,
+                  fontWeight: 'bold',
+                  color: '#0f172a',
+                  lineHeight: 11
+                }
+              }
+            },
+            zlevel: 9
+          }
+        ],
+        geo: {
+          map: 'china_standard',
+          show: false,
+          roam: true,
+          zoom: isMobile ? 1.45 : 1.25,
+          center: [104.2, 36.5]
+        }
+      };
+
+      studyChart.setOption(option, true);
+
+      studyChart.off('georoam');
+      studyChart.on('georoam', function(params) {
+        const curOpt = studyChart.getOption();
+        if (params.zoom != null) {
+          curOpt.geo[0].zoom = curOpt.series[0].zoom;
+          curOpt.geo[0].center = curOpt.series[0].center;
+        } else {
+          curOpt.geo[0].center = curOpt.series[0].center;
+        }
+        studyChart.setOption(curOpt);
+      });
+    }
+
+    // 2. 记忆背诵模式
+    function initQuizMode() {
+      if (!quizChart) {
+        quizChart = echarts.init(document.getElementById('quiz-map-container'), null, {
+          devicePixelRatio: window.devicePixelRatio || 2
+        });
+      }
+      nextQuestion();
+    }
+
+    function getFeatureSpan(geometry) {
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      function scanCoords(coords) {
+        if (typeof coords[0] === 'number') {
+          minX = Math.min(minX, coords[0]);
+          maxX = Math.max(maxX, coords[0]);
+          minY = Math.min(minY, coords[1]);
+          maxY = Math.max(maxY, coords[1]);
+        } else {
+          for (let i = 0; i < coords.length; i++) {
+            scanCoords(coords[i]);
+          }
+        }
+      }
+      scanCoords(geometry.coordinates);
+      return { spanX: maxX - minX, spanY: maxY - minY };
+    }
+
+    function renderQuizMap(showAnswer = false) {
+      const targetFeature = fullGeoJSON.features.find(f => f.properties.name === currentTarget.name);
+      if (!targetFeature) return;
+
+      const isolatedGeo = {
+        type: "FeatureCollection",
+        features: [targetFeature]
+      };
+
+      const mapKey = 'quiz_province_' + currentTarget.name;
+      echarts.registerMap(mapKey, isolatedGeo);
+
+      const isMobile = isMobileDevice();
+      const { spanX, spanY } = getFeatureSpan(targetFeature.geometry);
+      const maxSpan = Math.max(spanX, spanY);
+
+      // 根据手机和 Pad 屏幕特性动态适配单省最佳视口大小
+      let adaptedZoom = isMobile ? 0.95 : 0.85;
+      if (maxSpan < 0.8) {
+        adaptedZoom = isMobile ? 0.55 : 0.45;
+      } else if (maxSpan < 2.0) {
+        adaptedZoom = isMobile ? 0.75 : 0.65;
+      }
+
+      const option = {
+        backgroundColor: '#FFFFFF',
+        series: [
+          {
+            type: 'map',
+            map: mapKey,
+            roam: false,
+            zoom: adaptedZoom,
+            aspectScale: 0.9,
+            selectedMode: false,
+            data: [
+              {
+                name: currentTarget.name,
+                itemStyle: {
+                  areaColor: currentTarget.color,
+                  borderColor: '#1D2129',
+                  borderWidth: 2,
+                  shadowColor: 'rgba(0, 0, 0, 0.06)',
+                  shadowBlur: 8,
+                  shadowOffsetX: 1,
+                  shadowOffsetY: 3
+                }
+              }
+            ],
+            label: {
+              show: showAnswer,
+              formatter: function() {
+                return `{title|${currentTarget.name}}\n{abbr|(${currentTarget.abbr})}\n{cap|行政中心: ${currentTarget.capital}}`;
+              },
+              rich: {
+                title: {
+                  fontSize: isMobile ? 14 : 17,
+                  fontWeight: 'bold',
+                  color: '#FA5151',
+                  lineHeight: isMobile ? 20 : 26,
+                  align: 'center'
+                },
+                abbr: {
+                  fontSize: isMobile ? 11 : 13,
+                  fontWeight: 'bold',
+                  color: '#4E5969',
+                  lineHeight: isMobile ? 16 : 20,
+                  align: 'center'
+                },
+                cap: {
+                  fontSize: isMobile ? 11 : 13,
+                  fontWeight: 'bold',
+                  color: '#1456F0',
+                  lineHeight: isMobile ? 18 : 22,
+                  align: 'center'
+                }
+              }
+            },
+            emphasis: {
+              itemStyle: { areaColor: currentTarget.color },
+              label: { show: showAnswer }
+            }
+          }
+        ]
+      };
+      quizChart.setOption(option, true);
+      quizChart.resize();
+    }
+
+    function nextQuestion() {
+      hasAnswered = false;
+      userSelection = { name: null, abbr: null, capital: null };
+      
+      document.getElementById('tap-advance-mask').style.display = 'none';
+      document.getElementById('next-btn').classList.add('hide');
+      const hint = document.getElementById('status-hint');
+      hint.className = 'status-hint';
+      hint.innerText = isMobileDevice() ? '请选择全称、简称与中心' : '请从下方选项中依次确定该区域的全称、简称与行政中心';
+
+      const randIdx = Math.floor(Math.random() * PROVINCE_DATABASE.length);
+      currentTarget = PROVINCE_DATABASE[randIdx];
+
+      renderQuizMap(false);
+
+      const otherProvinces = PROVINCE_DATABASE.filter(p => p.id !== currentTarget.id);
+      const shuffledOthers = otherProvinces.sort(() => 0.5 - Math.random()).slice(0, 2);
+
+      const nameOptions = [currentTarget.name, shuffledOthers[0].name, shuffledOthers[1].name].sort(() => 0.5 - Math.random());
+      buildOptionSet('opts-name', nameOptions, 'name');
+
+      let candidateAbbrs = otherProvinces.filter(p => p.abbr !== currentTarget.abbr);
+      let distractorAbbrs = [];
+      while (distractorAbbrs.length < 2 && candidateAbbrs.length > 0) {
+        let pick = candidateAbbrs.splice(Math.floor(Math.random() * candidateAbbrs.length), 1)[0].abbr;
+        if (!distractorAbbrs.includes(pick)) {
+          distractorAbbrs.push(pick);
+        }
+      }
+      const abbrOptions = [currentTarget.abbr, ...distractorAbbrs].sort(() => 0.5 - Math.random());
+      buildOptionSet('opts-abbr', abbrOptions, 'abbr');
+
+      const capitalOptions = [currentTarget.capital, shuffledOthers[0].capital, shuffledOthers[1].capital].sort(() => 0.5 - Math.random());
+      buildOptionSet('opts-capital', capitalOptions, 'capital');
+    }
+
+    function buildOptionSet(containerId, options, fieldType) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('div');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.title = opt;
+        btn.dataset.val = opt;
+        btn.onclick = () => {
+          if (hasAnswered) return;
+          Array.from(container.children).forEach(c => c.classList.remove('selected'));
+          btn.classList.add('selected');
+          userSelection[fieldType] = opt;
+
+          if (userSelection.name && userSelection.abbr && userSelection.capital) {
+            handleAutoEvaluation();
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function handleAutoEvaluation() {
+      hasAnswered = true;
+
+      const isNameRight = userSelection.name === currentTarget.name;
+      const isAbbrRight = userSelection.abbr === currentTarget.abbr;
+      const isCapRight = userSelection.capital === currentTarget.capital;
+      const isAllRight = isNameRight && isAbbrRight && isCapRight;
+
+      markOptions('opts-name', currentTarget.name, userSelection.name);
+      markOptions('opts-abbr', currentTarget.abbr, userSelection.abbr);
+      markOptions('opts-capital', currentTarget.capital, userSelection.capital);
+
+      const hint = document.getElementById('status-hint');
+
+      if (isAllRight) {
+        hint.className = 'status-hint success';
+        hint.innerText = '✓ 全对！正在切题...';
+        setTimeout(() => {
+          nextQuestion();
+        }, 500);
+      } else {
+        renderQuizMap(true);
+        hint.className = 'status-hint error';
+        hint.innerText = isMobileDevice() ? '✕ 答案已现，轻触屏幕任意处继续' : '✕ 回答有误，标准答案已呈现。点击屏幕任意区域或按空格键继续';
+        
+        document.getElementById('tap-advance-mask').style.display = 'block';
+        document.getElementById('next-btn').classList.remove('hide');
+      }
+    }
+
+    function markOptions(containerId, correctVal, chosenVal) {
+      const container = document.getElementById(containerId);
+      Array.from(container.children).forEach(btn => {
+        const val = btn.dataset.val;
+        if (val === correctVal) {
+          btn.classList.add('correct');
+        } else if (val === chosenVal && val !== correctVal) {
+          btn.classList.add('wrong');
+        }
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' || e.code === 'Enter') {
+        if (hasAnswered && document.getElementById('tap-advance-mask').style.display === 'block') {
+          e.preventDefault();
+          nextQuestion();
+        }
+      }
+    });
+
+    // 监听屏幕尺寸和横竖屏旋转，自动重绘图表
+    window.addEventListener('resize', () => {
+      if (studyChart) studyChart.resize();
+      if (quizChart) quizChart.resize();
+    });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        if (studyChart) studyChart.resize();
+        if (quizChart) quizChart.resize();
+      }, 200);
+    });
+
+    function switchMode(mode) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+      if (mode === 'learn') {
+        document.getElementById('tab-learn').classList.add('active');
+        document.getElementById('learn-view').classList.add('active');
+        if (studyChart) studyChart.resize();
+      } else {
+        document.getElementById('tab-quiz').classList.add('active');
+        document.getElementById('quiz-view').classList.add('active');
+        initQuizMode();
+      }
+    }
+
+    window.onload = initGeoData;
+  </script>
+</body>
+</html>
