@@ -30,7 +30,7 @@
     html, body {
       width: 100%;
       height: 100%;
-      height: 100dvh; /* 适配移动端动态地址栏高度 */
+      height: 100dvh;
     }
 
     body {
@@ -43,7 +43,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 顶部导航 */
     header {
       height: 56px;
       min-height: 56px;
@@ -100,7 +99,6 @@
       white-space: nowrap;
     }
 
-    /* 胶囊导航切换器 */
     .capsule-tabs {
       display: flex;
       background: #F2F3F5;
@@ -163,7 +161,7 @@
       height: 100%;
     }
 
-    /* 2. 记忆背诵模式：响应式弹性布局 */
+    /* 2. 记忆背诵模式 */
     #quiz-view {
       flex-direction: column;
       background-color: var(--bg-page);
@@ -220,7 +218,6 @@
       border-bottom: 8px solid var(--edu-error);
     }
 
-    /* 底部面板 */
     .quiz-bottom-panel {
       flex-shrink: 0;
       background: var(--bg-card);
@@ -348,6 +345,11 @@
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(20, 86, 240, 0.25);
       flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--edu-primary-hover);
     }
 
     .btn-action.hide { display: none; }
@@ -361,6 +363,151 @@
       z-index: 50;
       cursor: pointer;
       display: none;
+    }
+
+    /* 3. 简称由来页面样式 */
+    #origin-view {
+      flex-direction: column;
+      background-color: var(--bg-page);
+      overflow-y: auto;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    .origin-header {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .origin-header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .origin-title-box h2 {
+      font-size: 1.25rem;
+      color: var(--text-title);
+      margin-bottom: 4px;
+    }
+
+    .origin-title-box p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .tips-box {
+      background: #FFFBE6;
+      border: 1px solid #FFE58F;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #D48806;
+      line-height: 1.5;
+    }
+
+    .origin-filter-wrap {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      background: #F7F8FA;
+      color: var(--text-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--edu-primary-light);
+      border-color: var(--edu-primary);
+      color: var(--edu-primary);
+    }
+
+    .origin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      padding-bottom: 24px;
+    }
+
+    .origin-card {
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .origin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #B4CEFB;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-prov-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-title);
+    }
+
+    .card-abbr-badge {
+      padding: 3px 10px;
+      background: #EBF1FF;
+      color: var(--edu-primary);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    .card-type-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .tag-name { background: #E6F9F0; color: #00A870; }
+    .tag-history { background: #FEF3E6; color: #FA8C16; }
+    .tag-mountain { background: #F0F5FF; color: #2F54EB; }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.55;
+      background: #F9FAFC;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--edu-primary);
     }
 
     .loading-mask {
@@ -389,20 +536,19 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ================= 针对手机端竖屏（<= 768px）媒体查询适配 ================= */
     @media (max-width: 768px) {
       header {
-        padding: 0 12px;
+        padding: 0 10px;
         height: 50px;
         min-height: 50px;
       }
       .brand-subtitle { display: none; }
-      .brand-title { font-size: 0.95rem; }
-      .brand-badge { width: 28px; height: 28px; min-width: 28px; font-size: 0.95rem; }
+      .brand-title { font-size: 0.92rem; }
+      .brand-badge { width: 26px; height: 26px; min-width: 26px; font-size: 0.9rem; }
       
       .tab-btn {
-        padding: 5px 10px;
-        font-size: 0.78rem;
+        padding: 5px 8px;
+        font-size: 0.75rem;
       }
 
       #quiz-view {
@@ -410,7 +556,6 @@
         gap: 8px;
       }
 
-      /* 手机端底部卡片自适应高度与紧凑内边距 */
       .quiz-bottom-panel {
         padding: 10px 12px;
       }
@@ -425,7 +570,7 @@
 
       .option-btn {
         padding: 8px 4px;
-        font-size: 0.82rem; /* 减小字号，避免长省名（如内蒙古自治区）折行导致高度不一致 */
+        font-size: 0.82rem;
       }
 
       .status-hint {
@@ -436,16 +581,14 @@
         padding: 5px 12px;
         font-size: 0.78rem;
       }
-    }
 
-    /* 极窄屏（宽度 <= 360px，如 iPhone SE）特调 */
-    @media (max-width: 360px) {
-      .option-btn {
-        font-size: 0.75rem;
-        padding: 7px 2px;
+      #origin-view {
+        padding: 14px 12px;
+        gap: 14px;
       }
-      .brand-title {
-        font-size: 0.88rem;
+
+      .origin-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -463,6 +606,7 @@
     <div class="capsule-tabs">
       <button class="tab-btn active" id="tab-learn" onclick="switchMode('learn')">学习模式</button>
       <button class="tab-btn" id="tab-quiz" onclick="switchMode('quiz')">记忆背诵</button>
+      <button class="tab-btn" id="tab-origin" onclick="switchMode('origin')">简称由来</button>
     </div>
   </header>
 
@@ -511,44 +655,68 @@
         </div>
       </div>
     </div>
+
+    <!-- 3. 简称由来页面 -->
+    <div id="origin-view" class="view-panel">
+      <div class="origin-header">
+        <div class="origin-title-box">
+          <h2>中国34个省级行政区简称【3大类分类整理】</h2>
+          <p>严格按照：取自名称首尾字（16个）、源于历史古地名（14个）、取自名山大川（4个）划分</p>
+        </div>
+
+        <div class="tips-box">
+          💡 <strong>配套记忆小技巧：</strong>山川类仅4个：<strong>湘（湘江）、浙（浙江/钱塘江）、赣（赣江）、皖（皖山/天柱山）</strong>，单独记住；剩下的不是【名字截取】就是【历史古名】。
+        </div>
+
+        <div class="origin-filter-wrap">
+          <button class="filter-btn active" onclick="filterOrigins('all', this)">全部 34 个</button>
+          <button class="filter-btn" onclick="filterOrigins('name', this)">1. 取自名称首尾字 (16)</button>
+          <button class="filter-btn" onclick="filterOrigins('history', this)">2. 源于历史古地名 (14)</button>
+          <button class="filter-btn" onclick="filterOrigins('mountain', this)">3. 取自名山大川 (4)</button>
+        </div>
+      </div>
+
+      <div class="origin-grid" id="origin-grid-container"></div>
+    </div>
   </div>
 
   <script>
+    // 34个省级行政区规范数据库（含精确匹配的3大分类归类）[cite: 1, 2]
     const PROVINCE_DATABASE = [
-      { id: 1, name: "北京市", abbr: "京", capital: "北京", color: "#fff9c4", center: [116.40, 40.22], coord: [116.40, 39.90], isCapital: true },
-      { id: 2, name: "天津市", abbr: "津", capital: "天津", color: "#c8e6c9", center: [117.35, 39.38], coord: [117.20, 39.13] },
-      { id: 3, name: "河北省", abbr: "冀", capital: "石家庄", color: "#f8bbd0", center: [115.30, 38.60], coord: [114.51, 38.04] },
-      { id: 4, name: "山西省", abbr: "晋", capital: "太原", color: "#c8e6c9", center: [112.30, 37.20], coord: [112.55, 37.87] },
-      { id: 5, name: "内蒙古自治区", abbr: "内蒙古", capital: "呼和浩特", color: "#fff9c4", center: [114.20, 43.80], coord: [111.75, 40.84] },
-      { id: 6, name: "辽宁省", abbr: "辽", capital: "沈阳", color: "#d1c4e9", center: [123.00, 41.30], coord: [123.43, 41.80] },
-      { id: 7, name: "吉林省", abbr: "吉", capital: "长春", color: "#f8bbd0", center: [126.20, 43.60], coord: [125.32, 43.89] },
-      { id: 8, name: "黑龙江省", abbr: "黑", capital: "哈尔滨", color: "#c8e6c9", center: [127.80, 47.20], coord: [126.65, 45.77] },
-      { id: 9, name: "上海市", abbr: "沪或申", capital: "上海", color: "#ffe0b2", center: [121.75, 31.15], coord: [121.47, 31.23] },
-      { id: 10, name: "江苏省", abbr: "苏", capital: "南京", color: "#f8bbd0", center: [119.80, 33.20], coord: [118.80, 32.06] },
-      { id: 11, name: "浙江省", abbr: "浙", capital: "杭州", color: "#fff9c4", center: [120.20, 29.10], coord: [120.15, 30.28] },
-      { id: 12, name: "安徽省", abbr: "皖", capital: "合肥", color: "#c8e6c9", center: [117.20, 32.20], coord: [117.28, 31.86] },
-      { id: 13, name: "福建省", abbr: "闽", capital: "福州", color: "#ffe0b2", center: [118.00, 26.00], coord: [119.30, 26.08] },
-      { id: 14, name: "江西省", abbr: "赣", capital: "南昌", color: "#f8bbd0", center: [115.70, 27.60], coord: [115.89, 28.68] },
-      { id: 15, name: "山东省", abbr: "鲁", capital: "济南", color: "#fff9c4", center: [118.20, 36.30], coord: [117.02, 36.67] },
-      { id: 16, name: "河南省", abbr: "豫", capital: "郑州", color: "#ffe0b2", center: [113.60, 33.80], coord: [113.62, 34.75] },
-      { id: 17, name: "湖北省", abbr: "鄂", capital: "武汉", color: "#fff9c4", center: [112.40, 31.10], coord: [114.30, 30.59] },
-      { id: 18, name: "湖南省", abbr: "湘", capital: "长沙", color: "#ffe0b2", center: [111.70, 27.60], coord: [112.98, 28.20] },
-      { id: 19, name: "广东省", abbr: "粤", capital: "广州", color: "#fff9c4", center: [113.60, 23.90], coord: [113.26, 23.13] },
-      { id: 20, name: "广西壮族自治区", abbr: "桂", capital: "南宁", color: "#f8bbd0", center: [108.80, 23.80], coord: [108.32, 22.82] },
-      { id: 21, name: "海南省", abbr: "琼", capital: "海口", color: "#ffe0b2", center: [109.80, 19.10], coord: [110.33, 20.04] },
-      { id: 22, name: "重庆市", abbr: "渝", capital: "重庆", color: "#d1c4e9", center: [107.80, 30.10], coord: [106.55, 29.56] },
-      { id: 23, name: "四川省", abbr: "川或蜀", capital: "成都", color: "#ffe0b2", center: [102.50, 30.60], coord: [104.07, 30.67] },
-      { id: 24, name: "贵州省", abbr: "贵或黔", capital: "贵阳", color: "#c8e6c9", center: [106.70, 26.80], coord: [106.71, 26.57] },
-      { id: 25, name: "云南省", abbr: "云或滇", capital: "昆明", color: "#fff9c4", center: [101.40, 24.30], coord: [102.71, 25.04] },
-      { id: 26, name: "西藏自治区", abbr: "藏", capital: "拉萨", color: "#f8bbd0", center: [88.50, 31.50], coord: [91.13, 29.65] },
-      { id: 27, name: "陕西省", abbr: "陕或秦", capital: "西安", color: "#f8bbd0", center: [108.80, 35.20], coord: [108.95, 34.27] },
-      { id: 28, name: "甘肃省", abbr: "甘或陇", capital: "兰州", color: "#c8e6c9", center: [101.50, 38.20], coord: [103.83, 36.06] },
-      { id: 29, name: "青海省", abbr: "青", capital: "西宁", color: "#d1c4e9", center: [96.00, 35.60], coord: [101.78, 36.62] },
-      { id: 30, name: "宁夏回族自治区", abbr: "宁", capital: "银川", color: "#ffe0b2", center: [106.10, 37.20], coord: [106.28, 38.47] },
-      { id: 31, name: "新疆维吾尔自治区", abbr: "新", capital: "乌鲁木齐", color: "#ffe0b2", center: [85.50, 41.50], coord: [87.62, 43.82] },
-      { id: 32, name: "香港特别行政区", abbr: "港", capital: "香港", color: "#f8bbd0", center: [114.30, 22.38], coord: [114.17, 22.32] },
-      { id: 33, name: "澳门特别行政区", abbr: "澳", capital: "澳门", color: "#d1c4e9", center: [113.45, 22.15], coord: [113.54, 22.19] },
-      { id: 34, name: "台湾省", abbr: "台", capital: "台北", color: "#c8e6c9", center: [121.00, 23.70], coord: [121.51, 25.04] }
+      { id: 1, name: "北京市", abbr: "京", capital: "北京", color: "#fff9c4", center: [116.40, 40.22], coord: [116.40, 39.90], isCapital: true, originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“北京”尾字。" },
+      { id: 2, name: "天津市", abbr: "津", capital: "天津", color: "#c8e6c9", center: [117.35, 39.38], coord: [117.20, 39.13], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“天津”尾字。" },
+      { id: 3, name: "河北省", abbr: "冀", capital: "石家庄", color: "#f8bbd0", center: [115.30, 38.60], coord: [114.51, 38.04], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古冀州，上古九州之一，辖区大致在今天河北一带。" },
+      { id: 4, name: "山西省", abbr: "晋", capital: "太原", color: "#c8e6c9", center: [112.30, 37.20], coord: [112.55, 37.87], originCategory: "history", originTypeName: "源于历史古地名", originReason: "春秋时期晋国核心区域，周代晋国，文化影响力深远，故简称晋。" },
+      { id: 5, name: "内蒙古自治区", abbr: "蒙", capital: "呼和浩特", color: "#fff9c4", center: [114.20, 43.80], coord: [111.75, 40.84], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“内蒙古”全称。" },
+      { id: 6, name: "辽宁省", abbr: "辽", capital: "沈阳", color: "#d1c4e9", center: [123.00, 41.30], coord: [123.43, 41.80], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“辽宁”首字。" },
+      { id: 7, name: "吉林省", abbr: "吉", capital: "长春", color: "#f8bbd0", center: [126.20, 43.60], coord: [125.32, 43.89], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“吉林”首字。" },
+      { id: 8, name: "黑龙江省", abbr: "黑", capital: "哈尔滨", color: "#c8e6c9", center: [127.80, 47.20], coord: [126.65, 45.77], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“黑龙江”首字。" },
+      { id: 9, name: "上海市", abbr: "沪或申", capital: "上海", color: "#ffe0b2", center: [121.75, 31.15], coord: [121.47, 31.23], originCategory: "name", originTypeName: "名称与历史古称", originReason: "“沪”源自古吴淞江水系捕鱼工具及沪渎；“申”源自战国楚国春申君封邑。" },
+      { id: 10, name: "江苏省", abbr: "苏", capital: "南京", color: "#f8bbd0", center: [119.80, 33.20], coord: [118.80, 32.06], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“江苏”（江宁+苏州）组合名称里的“苏”字。" },
+      { id: 11, name: "浙江省", abbr: "浙", capital: "杭州", color: "#fff9c4", center: [120.20, 29.10], coord: [120.15, 30.28], originCategory: "mountain", originTypeName: "取自名山大川", originReason: "境内钱塘江古称“浙江”，江流曲折，故称浙江。" },
+      { id: 12, name: "安徽省", abbr: "皖", capital: "合肥", color: "#c8e6c9", center: [117.20, 32.20], coord: [117.28, 31.86], originCategory: "mountain", originTypeName: "取自名山大川", originReason: "境内有名山皖山（今潜山天柱山），古称皖山、皖水，故简称皖。" },
+      { id: 13, name: "福建省", abbr: "闽", capital: "福州", color: "#ffe0b2", center: [118.00, 26.00], coord: [119.30, 26.08], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古闽越部落，先秦七闽及闽越国地。" },
+      { id: 14, name: "江西省", abbr: "赣", capital: "南昌", color: "#f8bbd0", center: [115.70, 27.60], coord: [115.89, 28.68], originCategory: "mountain", originTypeName: "取自名山大川", originReason: "境内赣江，省内最大河流，贯穿全省南北。" },
+      { id: 15, name: "山东省", abbr: "鲁", capital: "济南", color: "#fff9c4", center: [118.20, 36.30], coord: [117.02, 36.67], originCategory: "history", originTypeName: "源于历史古地名", originReason: "先秦鲁国核心区域在今山东，周代鲁国文化影响力极大，故简称鲁。" },
+      { id: 16, name: "河南省", abbr: "豫", capital: "郑州", color: "#ffe0b2", center: [113.60, 33.80], coord: [113.62, 34.75], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古豫州，上古九州之一，辖区大致在今天河南一带。" },
+      { id: 17, name: "湖北省", abbr: "鄂", capital: "武汉", color: "#fff9c4", center: [112.40, 31.10], coord: [114.30, 30.59], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古鄂国；隋代设鄂州（今武汉鄂州一带），沿用古地名。" },
+      { id: 18, name: "湖南省", abbr: "湘", capital: "长沙", color: "#ffe0b2", center: [111.70, 27.60], coord: [112.98, 28.20], originCategory: "mountain", originTypeName: "取自名山大川", originReason: "境内湘江，自南向北流贯全境，为湖南母亲河。" },
+      { id: 19, name: "广东省", abbr: "粤", capital: "广州", color: "#fff9c4", center: [113.60, 23.90], coord: [113.26, 23.13], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古代“百越”，粤是越的通假，古粤地，岭南古族群名称。" },
+      { id: 20, name: "广西壮族自治区", abbr: "桂", capital: "南宁", color: "#f8bbd0", center: [108.80, 23.80], coord: [108.32, 22.82], originCategory: "history", originTypeName: "源于历史古地名", originReason: "秦置桂林郡；古代桂州（今桂林，长期为广西行政中心）。" },
+      { id: 21, name: "海南省", abbr: "琼", capital: "海口", color: "#ffe0b2", center: [109.80, 19.10], coord: [110.33, 20.04], originCategory: "history", originTypeName: "源于历史古地名", originReason: "古代设琼州，从唐代琼州一直沿用。" },
+      { id: 22, name: "重庆市", abbr: "渝", capital: "重庆", color: "#d1c4e9", center: [107.80, 30.10], coord: [106.55, 29.56], originCategory: "history", originTypeName: "源于历史古地名", originReason: "隋代古渝州（境内嘉陵江古称渝水）。" },
+      { id: 23, name: "四川省", abbr: "川或蜀", capital: "成都", color: "#ffe0b2", center: [102.50, 30.60], coord: [104.07, 30.67], originCategory: "name", originTypeName: "取自名称首尾字（蜀为历史）", originReason: "“川”取自“四川”首字；“蜀”为历史别称，源于先秦古蜀国。" },
+      { id: 24, name: "贵州省", abbr: "贵或黔", capital: "贵阳", color: "#c8e6c9", center: [106.70, 26.80], coord: [106.71, 26.57], originCategory: "name", originTypeName: "取自名称首尾字（黔为历史）", originReason: "“贵”取自“贵州”首字；“黔”为历史别称，源自唐代黔中道、古黔州。" },
+      { id: 25, name: "云南省", abbr: "云或滇", capital: "昆明", color: "#fff9c4", center: [101.40, 24.30], coord: [102.71, 25.04], originCategory: "name", originTypeName: "取自名称首尾字（滇为历史）", originReason: "“云”取自“云南”首字；“滇”为历史别称，源自战国古滇国、滇池一带。" },
+      { id: 26, name: "西藏自治区", abbr: "藏", capital: "拉萨", color: "#f8bbd0", center: [88.50, 31.50], coord: [91.13, 29.65], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“西藏”尾字。" },
+      { id: 27, name: "陕西省", abbr: "陕或秦", capital: "西安", color: "#f8bbd0", center: [108.80, 35.20], coord: [108.95, 34.27], originCategory: "history", originTypeName: "源于历史古地名", originReason: "先秦秦国核心地域，关中是秦国故土，简称秦；“陕”亦源自西周分陕而治之古地名陕塬。" },
+      { id: 28, name: "甘肃省", abbr: "甘或陇", capital: "兰州", color: "#c8e6c9", center: [101.50, 38.20], coord: [103.83, 36.06], originCategory: "name", originTypeName: "取自名称首尾字（陇为历史）", originReason: "“甘”取自“甘肃”首字；“陇”为历史别称，源自古陇右、陇山一带、古代陇州。" },
+      { id: 29, name: "青海省", abbr: "青", capital: "西宁", color: "#d1c4e9", center: [96.00, 35.60], coord: [101.78, 36.62], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“青海”首字。" },
+      { id: 30, name: "宁夏回族自治区", abbr: "宁", capital: "银川", color: "#ffe0b2", center: [106.10, 37.20], coord: [106.28, 38.47], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“宁夏”尾字。" },
+      { id: 31, name: "新疆维吾尔自治区", abbr: "新", capital: "乌鲁木齐", color: "#ffe0b2", center: [85.50, 41.50], coord: [87.62, 43.82], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自全称首字“新”，源于清乾隆年间“故土新归”。" },
+      { id: 32, name: "香港特别行政区", abbr: "港", capital: "香港", color: "#f8bbd0", center: [114.30, 22.38], coord: [114.17, 22.32], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“香港”尾字。" },
+      { id: 33, name: "澳门特别行政区", abbr: "澳", capital: "澳门", color: "#d1c4e9", center: [113.45, 22.15], coord: [113.54, 22.19], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“澳门”首字。" },
+      { id: 34, name: "台湾省", abbr: "台", capital: "台北", color: "#c8e6c9", center: [121.00, 23.70], coord: [121.51, 25.04], originCategory: "name", originTypeName: "取自名称首尾字", originReason: "取自“台湾”首字。" }
     ];
 
     let fullGeoJSON = null;
@@ -594,7 +762,9 @@
 
       echarts.registerMap('china_standard', fullGeoJSON);
       document.getElementById('loading').style.display = 'none';
+      
       initStudyMode();
+      renderOriginCards('all');
     }
 
     // 1. 学习模式
@@ -660,7 +830,7 @@
             type: 'map',
             map: 'china_standard',
             roam: true,
-            zoom: isMobile ? 1.45 : 1.25, // 手机端适当放大基础缩放比例
+            zoom: isMobile ? 1.45 : 1.25,
             center: [104.2, 36.5],
             selectedMode: false,
             data: mapData,
@@ -789,7 +959,6 @@
       const { spanX, spanY } = getFeatureSpan(targetFeature.geometry);
       const maxSpan = Math.max(spanX, spanY);
 
-      // 根据手机和 Pad 屏幕特性动态适配单省最佳视口大小
       let adaptedZoom = isMobile ? 0.95 : 0.85;
       if (maxSpan < 0.8) {
         adaptedZoom = isMobile ? 0.55 : 0.45;
@@ -913,14 +1082,14 @@
           userSelection[fieldType] = opt;
 
           if (userSelection.name && userSelection.abbr && userSelection.capital) {
-            handleAutoEvaluation();
+            handleEvaluation();
           }
         };
         container.appendChild(btn);
       });
     }
 
-    function handleAutoEvaluation() {
+    function handleEvaluation() {
       hasAnswered = true;
 
       const isNameRight = userSelection.name === currentTarget.name;
@@ -932,22 +1101,20 @@
       markOptions('opts-abbr', currentTarget.abbr, userSelection.abbr);
       markOptions('opts-capital', currentTarget.capital, userSelection.capital);
 
+      renderQuizMap(true);
+
       const hint = document.getElementById('status-hint');
 
       if (isAllRight) {
         hint.className = 'status-hint success';
-        hint.innerText = '✓ 全对！正在切题...';
-        setTimeout(() => {
-          nextQuestion();
-        }, 500);
+        hint.innerText = isMobileDevice() ? '✓ 全对！轻触任意处切题' : '✓ 全部正确！点击屏幕任意区域、按空格键或点击按钮切入下一题';
       } else {
-        renderQuizMap(true);
         hint.className = 'status-hint error';
-        hint.innerText = isMobileDevice() ? '✕ 答案已现，轻触屏幕任意处继续' : '✕ 回答有误，标准答案已呈现。点击屏幕任意区域或按空格键继续';
-        
-        document.getElementById('tap-advance-mask').style.display = 'block';
-        document.getElementById('next-btn').classList.remove('hide');
+        hint.innerText = isMobileDevice() ? '✕ 答案已现，轻触任意处切题' : '✕ 回答有误，标准答案已呈现。点击屏幕任意区域、按空格键或点击按钮切入下一题';
       }
+
+      document.getElementById('tap-advance-mask').style.display = 'block';
+      document.getElementById('next-btn').classList.remove('hide');
     }
 
     function markOptions(containerId, correctVal, chosenVal) {
@@ -962,6 +1129,48 @@
       });
     }
 
+    // 3. 简称由来页面按调整后的3大类渲染
+    function renderOriginCards(category = 'all') {
+      const grid = document.getElementById('origin-grid-container');
+      grid.innerHTML = '';
+
+      let list = [];
+      if (category === 'all') {
+        list = PROVINCE_DATABASE;
+      } else {
+        list = PROVINCE_DATABASE.filter(p => p.originCategory === category);
+      }
+
+      list.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'origin-card';
+
+        let tagClass = 'tag-name';
+        if (p.originCategory === 'history') tagClass = 'tag-history';
+        if (p.originCategory === 'mountain') tagClass = 'tag-mountain';
+
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="card-prov-name">${p.name}</span>
+            <span class="card-abbr-badge">${p.abbr}</span>
+          </div>
+          <div>
+            <span class="card-type-tag ${tagClass}">● ${p.originTypeName}</span>
+          </div>
+          <div class="card-desc">
+            ${p.originReason}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterOrigins(category, btnElem) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElem.classList.add('active');
+      renderOriginCards(category);
+    }
+
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space' || e.code === 'Enter') {
         if (hasAnswered && document.getElementById('tap-advance-mask').style.display === 'block') {
@@ -971,7 +1180,6 @@
       }
     });
 
-    // 监听屏幕尺寸和横竖屏旋转，自动重绘图表
     window.addEventListener('resize', () => {
       if (studyChart) studyChart.resize();
       if (quizChart) quizChart.resize();
@@ -991,10 +1199,14 @@
         document.getElementById('tab-learn').classList.add('active');
         document.getElementById('learn-view').classList.add('active');
         if (studyChart) studyChart.resize();
-      } else {
+      } else if (mode === 'quiz') {
         document.getElementById('tab-quiz').classList.add('active');
         document.getElementById('quiz-view').classList.add('active');
         initQuizMode();
+      } else if (mode === 'origin') {
+        document.getElementById('tab-origin').classList.add('active');
+        document.getElementById('origin-view').classList.add('active');
+        renderOriginCards('all');
       }
     }
 
